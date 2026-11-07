@@ -35,10 +35,9 @@ dependencies = [
   'resampy',
   'colorlog',
   'omegaconf',
-  'laion-clap @ git+https://github.com/hkchengrex/CLAP.git',
-  'passt @ git+https://github.com/hkchengrex/passt_hear21.git',
-  'imagebind @ git+https://github.com/hkchengrex/ImageBind.git',
-  'msclap @ git+https://github.com/hkchengrex/MS-CLAP.git',
+  'laion-clap @ git+https://github.com/hkchengrex/CLAP.git@590b52df03a5e480634b8714135d3534313be860',
+  'passt @ git+https://github.com/hkchengrex/passt_hear21.git@1ab778984f67cca09dd8bbad11f728a0122cce24',
+  'imagebind @ git+https://github.com/hkchengrex/ImageBind.git@9989650c87d393d7e8c144194182cbf124cd03a0',
   'pandas',
   'setuptools<81',
 ]

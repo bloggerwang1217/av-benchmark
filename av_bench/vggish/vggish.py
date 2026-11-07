@@ -51,7 +51,8 @@ class VGGish(VGG):
     def __init__(self, device=None, pretrained=True, preprocess=True, postprocess=True):
         super().__init__(make_layers())
         if pretrained:
-            state_dict = torch.hub.load('harritaylor/torchvggish', 'vggish').state_dict()
+            state_dict = torch.hub.load('harritaylor/torchvggish', 'vggish',
+                                        trust_repo=True).state_dict()
             super().load_state_dict(state_dict, strict=False)
 
         if device is None:

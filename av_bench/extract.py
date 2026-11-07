@@ -145,16 +145,6 @@ def extract(audio_path: Path,
         log.info(f'Saving {len(out_dict)} features to {clap_feature_path}')
         torch.save(out_dict, clap_feature_path)
 
-        out_dict = {}
-        for i in range(0, len(audios), batch_size):
-            audio_paths = audios[i:i + batch_size]
-            ms_features = models.ms_clap.get_audio_embeddings(audio_paths).cpu().squeeze()
-            for f_name, f in zip(audio_paths, ms_features):
-                out_dict[f_name.stem] = f
-        ms_feature_path = output_path / 'clap_ms_audio.pth'
-        log.info(f'Saving {len(out_dict)} features to {ms_feature_path}')
-        torch.save(out_dict, ms_feature_path)
-
     # PassT, need 32K sampling rate
     dataset = AudioDataset(audios, audio_length=audio_length, sr=32_000)
     loader = DataLoader(dataset, batch_size=batch_size, num_workers=num_workers, pin_memory=True)

@@ -6,11 +6,9 @@ import laion_clap
 import pandas as pd
 import torch
 from colorlog import ColoredFormatter
-from msclap import CLAP
 from tqdm import tqdm
 
-_clap_ckpt_path = Path(
-    __file__).parent.parent / 'weights' / 'music_speech_audioset_epoch_15_esc_89.98.pt'
+_clap_ckpt_path = Path(__file__).parent / 'weights' / 'music_audioset_epoch_15_esc_90.14.pt'
 log = logging.getLogger()
 device = 'cuda'
 
@@ -43,10 +41,7 @@ def extract(args):
                                               amodel='HTSAT-base').cuda().eval()
     laion_clap_model.load_ckpt(_clap_ckpt_path, verbose=False)
 
-    ms_clap_model = CLAP(version='2023', use_cuda=True)
-
     all_laion_clap = {}
-    all_ms_clap = {}
     for row in tqdm(df):
         name = str(row['name'])
         caption = row['caption']
@@ -55,11 +50,7 @@ def extract(args):
         text_embed = laion_clap_model.get_text_embedding(text_data, use_tensor=True)
         all_laion_clap[name] = text_embed.cpu().squeeze()
 
-        text_embed = ms_clap_model.get_text_embeddings(text_data)
-        all_ms_clap[name] = text_embed.cpu().squeeze()
-
     torch.save(all_laion_clap, output_cache_path / 'clap_laion_text.pth')
-    torch.save(all_ms_clap, output_cache_path / 'clap_ms_text.pth')
 
 
 if __name__ == '__main__':

@@ -83,17 +83,8 @@ def evaluate(gt_audio_cache: Path,
             paired_laion_clap_text_features, paired_laion_clap_audio_features, unpaired_laion_clap_keys = unroll_paired_dict(
                 laion_clap_text_features, laion_clap_audio_features)
             log.info(f'Unpaired LAION CLAP features keys: {unpaired_laion_clap_keys}')
-
-            ms_clap_text_features = torch.load(gt_audio_cache / 'clap_ms_text.pth',
-                                               weights_only=True)
-            ms_clap_audio_features = torch.load(pred_audio_cache / 'clap_ms_audio.pth',
-                                                weights_only=True)
-            paired_ms_clap_text_features, paired_ms_clap_audio_features, unpaired_ms_clap_keys = unroll_paired_dict(
-                ms_clap_text_features, ms_clap_audio_features)
-            log.info(f'Unpaired MS CLAP features keys: {unpaired_ms_clap_keys}')
         else:
             paired_laion_clap_text_features = paired_laion_clap_audio_features = None
-            paired_ms_clap_text_features = paired_ms_clap_audio_features = None
             log.info('No CLAP features found, skipping CLAP-score evaluation')
     else:
         paired_panns_logits = gt_panns_logits = None
@@ -196,10 +187,5 @@ def evaluate(gt_audio_cache: Path,
                                              paired_laion_clap_audio_features,
                                              dim=-1).mean()
         output_metrics['LAION-CLAP-Score'] = clap_score.item()
-
-        clap_score = torch.cosine_similarity(paired_ms_clap_text_features,
-                                             paired_ms_clap_audio_features,
-                                             dim=-1).mean()
-        output_metrics['MS-CLAP-Score'] = clap_score.item()
 
     return output_metrics
